@@ -3,118 +3,222 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#000000">
-<title>Rickshaw Lagbe? – Request a ride</title>
+<title>Rickshaw Lagbe? – Request a ride or earn by driving | Bangladesh</title>
+<meta name="description" content="Get a rickshaw, battery rickshaw, CNG auto, easy bike or moto in minutes. Or drive and earn on your schedule.">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-:root{--g:#f3f3f3;--g2:#e2e2e2;--t:#6b6b6b;--ok:#05944f}
-body{margin:0;font:16px/1.4 "Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;color:#000;background:#fff;overflow:hidden}
-#map{position:fixed;inset:0}.leaflet-control-attribution{font-size:9px}
-button{font:inherit;cursor:pointer}
-.fab{position:fixed;z-index:900;top:max(14px,env(safe-area-inset-top));left:14px;width:46px;height:46px;border-radius:50%;border:0;background:#fff;box-shadow:0 2px 12px #0003;font-size:20px}
-#sheet{position:fixed;z-index:900;left:0;right:0;bottom:0;background:#fff;border-radius:18px 18px 0 0;box-shadow:0 -6px 24px #0002;padding:10px 18px calc(18px + env(safe-area-inset-bottom));max-height:78vh;overflow:auto;animation:up .3s}
+:root{--g:#f3f3f3;--g2:#e2e2e2;--t:#545454}
+html{scroll-behavior:smooth}
+body{margin:0;font:16px/1.5 "Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;color:#000;background:#fff}
+a{color:inherit;cursor:pointer}button{font:inherit;cursor:pointer}
+.w{max-width:1200px;margin:0 auto;padding:0 24px}
+/* header */
+header{position:sticky;top:0;z-index:500;background:#000;color:#fff}
+header .w{display:flex;align-items:center;height:64px;gap:22px}
+.logo{font-weight:800;font-size:22px;letter-spacing:-.8px;text-decoration:none;white-space:nowrap}
+nav{display:flex;gap:6px;flex:1}nav a{padding:8px 14px;border-radius:20px;font-size:15px;font-weight:500;text-decoration:none}nav a:hover,nav a.on{background:#333}
+.dd{position:relative}.dd div{display:none;position:absolute;top:100%;left:0;background:#fff;color:#000;border-radius:10px;min-width:220px;box-shadow:0 6px 24px #0004;padding:8px;z-index:10}.dd:hover div{display:block}.dd div a{display:block}.dd div a:hover{background:var(--g)}
+.hr{display:flex;gap:8px;align-items:center;font-size:15px}.hr a{padding:8px 12px;border-radius:20px;font-weight:500;text-decoration:none}.hr a:hover{background:#333}.hr .su{background:#fff;color:#000}.hr .su:hover{background:#ddd}
+#bg{display:none;background:none;border:0;color:#fff;font-size:26px}
+@media(max-width:860px){nav{display:none;position:absolute;top:64px;left:0;right:0;background:#000;flex-direction:column;padding:10px 24px 20px}nav.o{display:flex}#bg{display:block;margin-left:auto}.hr .lg{display:none}.dd div{position:static;display:block;background:none;color:#ccc;box-shadow:none}}
+/* hero */
+.hero{padding:56px 0 64px}.hero .w{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+h1{font-size:clamp(36px,5.5vw,60px);line-height:1.08;letter-spacing:-1.5px;margin:0 0 28px;font-weight:700}
+h2{font-size:clamp(26px,3.6vw,38px);letter-spacing:-.8px;line-height:1.15;margin:0 0 14px}
+.f{max-width:440px}.in{width:100%;border:0;background:var(--g);padding:15px 16px;border-radius:10px;font:inherit;margin:7px 0;outline:0}.in:focus{box-shadow:inset 0 0 0 2px #000}
+.fi{position:relative}.fi button{position:absolute;right:8px;top:14px;border:0;background:none;font-size:18px}
+.btn{display:inline-block;padding:15px 24px;border:0;border-radius:10px;background:#000;color:#fff;font-weight:600;text-decoration:none;text-align:center}.btn:hover{background:#333}.btn.l{background:var(--g);color:#000}.btn.l:hover{background:var(--g2)}.btn.b{display:block;width:100%;margin-top:10px}
+.lnk{display:inline-block;margin-top:14px;font-weight:500;text-decoration:underline}
+.art{background:var(--g);border-radius:24px;aspect-ratio:1;display:grid;place-items:center;position:relative;overflow:hidden}.art .big{font-size:min(30vw,190px);animation:fl 3s infinite alternate}.art .r{position:absolute;bottom:0;left:0;right:0;height:22%;background:#000}.art .r:before{content:"";position:absolute;top:48%;left:0;right:0;border-top:3px dashed #fff8}
+@keyframes fl{to{transform:translateY(-12px)}}
+@media(max-width:860px){.hero .w{grid-template-columns:1fr}.art{display:none}}
+/* sections */
+section{padding:56px 0}.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:14px;margin-top:22px}
+.c{background:var(--g);border-radius:14px;padding:18px;cursor:pointer;min-height:150px;display:flex;flex-direction:column;justify-content:space-between;transition:.15s}.c:hover{background:var(--g2)}.c .e{font-size:40px}.c b{font-size:17px}.c small{display:block;color:var(--t);font-size:13px;line-height:1.3;margin-top:2px}
+.cs{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}.chip{padding:12px 20px;background:var(--g);border-radius:24px;font-weight:600;cursor:pointer}.chip:hover{background:var(--g2)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}.two.rev .art{order:-1}.two p{color:var(--t);font-size:18px;max-width:480px}
+@media(max-width:860px){.two{grid-template-columns:1fr;gap:24px}.two.rev .art{order:0}.two .art{display:grid;max-height:240px;aspect-ratio:auto;height:220px}}
+.acct{background:var(--g);border-radius:18px;padding:32px;display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+.saf{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;margin-top:22px}.saf div{border-top:3px solid #000;padding-top:12px}.saf p{color:var(--t);margin:4px 0}
+.dark{background:#000;color:#fff}.dark p,.dark .sub{color:#bbb}.dark .btn{background:#fff;color:#000}
+/* footer */
+footer{background:#000;color:#fff;padding:56px 0 30px}footer .g{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:28px;margin:30px 0}footer h4{margin:0 0 12px;font-size:16px}footer a{display:block;color:#ddd;font-size:14px;padding:4px 0;text-decoration:none}footer a:hover{color:#fff;text-decoration:underline}
+.fb{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-size:13px;color:#aaa;border-top:1px solid #333;padding-top:20px}.fb a{display:inline;margin-right:14px;color:#aaa}
+/* modal */
+#md{position:fixed;inset:0;z-index:1500;background:#0008;display:none;align-items:center;justify-content:center;padding:16px}#md.o{display:flex}
+#mb{background:#fff;border-radius:16px;padding:28px;width:100%;max-width:440px;max-height:88vh;overflow:auto;position:relative}
+#mb .x{position:absolute;right:14px;top:12px;border:0;background:var(--g);width:34px;height:34px;border-radius:50%;font-size:16px}
+.item{display:flex;gap:14px;align-items:center;padding:12px 0;border-bottom:1px solid #eee}.ic{width:38px;height:38px;border-radius:50%;background:var(--g);display:grid;place-items:center;flex:none}.sub{color:var(--t);font-size:14px}.sp{margin-left:auto}.b{font-weight:600}
+details{border-bottom:1px solid #eee;padding:12px 0}summary{font-weight:600;cursor:pointer}details p{margin:8px 0 0;color:var(--t)}
+#ts{position:fixed;z-index:3000;left:50%;bottom:40px;transform:translateX(-50%);background:#000;color:#fff;padding:12px 20px;border-radius:24px;font-size:14px;display:none;max-width:90%;text-align:center}
+/* app */
+#app{position:fixed;inset:0;z-index:1000;background:#fff;display:none}#app.o{display:block}#map{position:absolute;inset:0}.leaflet-control-attribution{font-size:9px}
+.ab{position:absolute;z-index:900;top:max(12px,env(safe-area-inset-top));left:12px;right:12px;display:flex;justify-content:space-between;pointer-events:none}.ab button{pointer-events:auto;height:46px;min-width:46px;padding:0 16px;border-radius:23px;border:0;background:#fff;box-shadow:0 2px 12px #0003;font-weight:600}
+#sheet{position:absolute;z-index:900;left:0;right:0;bottom:0;background:#fff;border-radius:18px 18px 0 0;box-shadow:0 -6px 24px #0002;padding:10px 18px calc(18px + env(safe-area-inset-bottom));max-height:78%;overflow:auto;animation:up .3s}
 #sheet:before{content:"";display:block;width:40px;height:4px;border-radius:2px;background:var(--g2);margin:0 auto 12px}
 @keyframes up{from{transform:translateY(40px);opacity:.5}}
-@media(min-width:800px){#sheet{left:20px;right:auto;top:20px;bottom:auto;width:400px;border-radius:14px;max-height:calc(100vh - 40px)}#sheet:before{display:none}.fab{left:auto;right:20px}}
-h2{font-size:24px;margin:4px 0 12px;letter-spacing:-.3px}h3{margin:0 0 4px;font-size:18px}
-.btn{display:block;width:100%;padding:16px;border:0;border-radius:10px;background:#000;color:#fff;font-weight:600;margin-top:12px}.btn.l{background:var(--g);color:#000}.btn.red{background:#fde8e8;color:#c00}.btn:disabled{opacity:.4}
-.search{display:flex;align-items:center;gap:14px;background:var(--g);border-radius:10px;padding:16px;font-size:20px;font-weight:600;cursor:pointer}
-.item{display:flex;gap:14px;align-items:center;padding:13px 0;border-bottom:1px solid #eee;cursor:pointer}.item:last-child{border:0}
-.ic{width:38px;height:38px;border-radius:50%;background:var(--g);display:grid;place-items:center;flex:none;font-size:17px}
-.sub{color:var(--t);font-size:14px}.sp{margin-left:auto}.b{font-weight:600}
+@media(min-width:800px){#sheet{left:20px;right:auto;top:76px;bottom:auto;width:400px;border-radius:14px;max-height:calc(100% - 96px)}#sheet:before{display:none}}
+h3{margin:0 0 4px;font-size:19px}.search{display:flex;gap:14px;background:var(--g);border-radius:10px;padding:16px;font-size:20px;font-weight:600;cursor:pointer;margin-top:6px}
 .veh{display:flex;gap:12px;align-items:center;padding:12px;border-radius:12px;border:2px solid transparent;cursor:pointer}.veh.on{border-color:#000;background:#fafafa}.veh .em{font-size:34px;width:52px;text-align:center}
-.pill{display:flex;align-items:center;gap:8px;background:var(--g);padding:10px 14px;border-radius:20px;font-size:14px;font-weight:600;flex:1}
-.pill select,.pill input{border:0;background:none;font:inherit;width:100%;outline:0}
-.in{width:100%;border:0;background:var(--g);padding:16px;border-radius:10px;font:inherit;margin:6px 0;outline:0}
-.in:focus{box-shadow:inset 0 0 0 2px #000}
-.row{display:flex;gap:10px;align-items:center}
-.act{flex:1;text-align:center;font-size:13px}.act button{width:54px;height:54px;border-radius:50%;border:0;background:var(--g);font-size:22px;margin-bottom:4px}
+.pill{display:flex;align-items:center;gap:8px;background:var(--g);padding:10px 14px;border-radius:20px;font-size:14px;font-weight:600;flex:1}.pill select,.pill input{border:0;background:none;font:inherit;width:100%;outline:0}
+.row{display:flex;gap:10px;align-items:center}.act{flex:1;text-align:center;font-size:13px}.act button{width:54px;height:54px;border-radius:50%;border:0;background:var(--g);font-size:22px;margin-bottom:4px}
 .bar{height:4px;background:var(--g2);border-radius:2px;overflow:hidden;margin:12px 0}.bar i{display:block;height:100%;background:#000;transition:width .5s}
-.pulse{width:70px;height:70px;border-radius:50%;background:#000;margin:20px auto;animation:p 1.4s infinite}
-@keyframes p{0%{box-shadow:0 0 0 0 #0006}100%{box-shadow:0 0 0 40px #0000}}
-.pin{background:#000;color:#fff;border-radius:8px;padding:6px 12px;font-weight:700;letter-spacing:3px}
-.av{width:56px;height:56px;border-radius:50%;background:var(--g);display:grid;place-items:center;font-size:28px}
-.st span{font-size:40px;color:var(--g2);cursor:pointer}.st span.on{color:#000}
-.chip{display:inline-block;padding:10px 16px;margin:4px 6px 0 0;background:var(--g);border-radius:20px;font-weight:600;font-size:14px;cursor:pointer}.chip.on{background:#000;color:#fff}
-#dr{position:fixed;z-index:1100;top:0;bottom:0;left:0;width:82%;max-width:330px;background:#fff;transform:translateX(-105%);transition:.25s;padding:max(24px,env(safe-area-inset-top)) 0 20px;display:flex;flex-direction:column}
-#dr.o{transform:none}#bk{position:fixed;z-index:1050;inset:0;background:#0006;display:none}#bk.o{display:block}
-#dr .u{padding:0 22px 20px;border-bottom:1px solid #eee;display:flex;gap:14px;align-items:center}
-#dr a{padding:16px 22px;font-size:18px;font-weight:500;cursor:pointer}
-#pg{position:fixed;z-index:1200;inset:0;background:#fff;overflow:auto;padding:max(16px,env(safe-area-inset-top)) 18px 24px;display:none}#pg.o{display:block}
-#land{position:fixed;z-index:2000;inset:0;background:#000;color:#fff;display:flex;flex-direction:column;justify-content:flex-end;padding:28px 22px calc(28px + env(safe-area-inset-bottom))}
-#land .logo{font-size:44px;font-weight:800;letter-spacing:-1.5px;line-height:1}#land .in{background:#1c1c1c;color:#fff}#land .btn{background:#fff;color:#000}
-.hero{flex:1;display:grid;place-items:center;font-size:120px;animation:fl 3s infinite alternate}@keyframes fl{to{transform:translateY(-10px)}}
-#ts{position:fixed;z-index:3000;left:50%;bottom:110px;transform:translateX(-50%);background:#000;color:#fff;padding:12px 18px;border-radius:24px;font-size:14px;display:none;max-width:90%;text-align:center}
+.pulse{width:70px;height:70px;border-radius:50%;background:#000;margin:20px auto;animation:p 1.4s infinite}@keyframes p{0%{box-shadow:0 0 0 0 #0006}100%{box-shadow:0 0 0 40px #0000}}
+.pin{background:#000;color:#fff;border-radius:8px;padding:6px 12px;font-weight:700;letter-spacing:3px}.av{width:56px;height:56px;border-radius:50%;background:var(--g);display:grid;place-items:center;font-size:28px}
+.st span{font-size:40px;color:var(--g2);cursor:pointer}.st span.on{color:#000}.tc{display:inline-block;padding:10px 16px;margin:4px 4px 0 0;background:var(--g);border-radius:20px;font-weight:600;font-size:14px;cursor:pointer}.tc.on{background:#000;color:#fff}
 .mk{width:16px;height:16px;background:#000;border:3px solid #fff;box-shadow:0 0 0 1px #0004,0 2px 6px #0005}
 </style>
 </head>
 <body>
-<div id="map"></div>
-<button class="fab" onclick="menu(1)" aria-label="Menu">☰</button>
-<div id="sheet"></div>
-<div id="bk" onclick="menu(0)"></div>
-<div id="dr"></div>
-<div id="pg"></div>
-<div id="land"></div>
+<header><div class="w">
+<a class="logo" href="#top">🛺 Rickshaw Lagbe?</a>
+<nav id="nv">
+<a class="on" onclick="openApp()" data-t="ride">Ride</a><a href="#drive" data-t="earn">Earn</a><a href="#biz" data-t="biz">Business</a>
+<span class="dd"><a data-t="about">About</a><div><a onclick="info('About us')">About us</a><a onclick="info('Our offerings')">Our offerings</a><a onclick="info('How Rickshaw Lagbe works')">How it works</a><a onclick="info('Sustainability')">Sustainability</a><a href="#cities">Cities</a><a onclick="info('Newsroom')">Newsroom</a><a onclick="info('Blog')">Blog</a><a onclick="info('Careers')">Careers</a></div></span>
+<a onclick="help()" data-t="help">Help</a>
+</nav>
+<div class="hr"><a onclick="lang()" id="lg">বাংলা</a><span id="au"></span></div>
+<button id="bg" onclick="$('#nv').classList.toggle('o')">☰</button>
+</div></header>
+
+<main id="top">
+<section class="hero"><div class="w">
+<div class="f"><h1 data-t="h1">Go anywhere with Rickshaw Lagbe</h1>
+<select class="in" id="when" onchange="$('#sdt').style.display=this.value=='later'?'block':'none'"><option value="now" data-t="now">🕒 Pickup now</option><option value="later" data-t="later">📅 Schedule for later</option></select>
+<input class="in" id="sdt" type="datetime-local" style="display:none">
+<datalist id="pl"></datalist>
+<div class="fi"><input class="in" id="pk" list="pl" placeholder="Pickup location" data-p="pickup" value="Dhanmondi 27"><button onclick="loc()" title="Use my location">📍</button></div>
+<input class="in" id="dp" list="pl" placeholder="Dropoff location" data-p="drop">
+<button class="btn" onclick="prices()" data-t="prices">See prices</button><br>
+<a class="lnk" id="rc" onclick="recent()" data-t="recent">Log in to see your recent activity</a></div>
+<div class="art"><div class="big">🛺</div><div class="r"></div></div>
+</div></section>
+
+<section style="padding-top:0"><div class="w"><h2 data-t="explore">Explore what you can do with Rickshaw Lagbe</h2>
+<div class="cards">
+<div class="c" onclick="openApp()"><span class="e">🚲</span><div><b>Ride</b><small>Rickshaw, auto &amp; more, in minutes</small></div></div>
+<div class="c" onclick="resv()"><span class="e">📅</span><div><b>Reserve</b><small>Book ahead for peace of mind</small></div></div>
+<div class="c" onclick="air()"><span class="e">✈️</span><div><b>Airport rides</b><small>Hazrat Shahjalal International</small></div></div>
+<div class="c" onclick="location.hash='biz'"><span class="e">💼</span><div><b>For business</b><small>Rides for your team</small></div></div>
+<div class="c" onclick="gift()"><span class="e">🎁</span><div><b>Gift cards</b><small>Give the gift of a ride</small></div></div>
+<div class="c" onclick="one()"><span class="e">⭐</span><div><b>Lagbe One</b><small>Member prices &amp; perks</small></div></div>
+</div></div></section>
+
+<section style="padding-top:0"><div class="w"><div class="acct"><div><h2 style="margin:0 0 6px" id="at">Log in to see your account details</h2><div class="sub" id="as">View past trips, tailored suggestions, support resources, and more.</div></div><div id="ab2"><a class="btn" onclick="auth('in')">Log in to your account</a> <a class="btn l" onclick="auth('up')">Create an account</a></div></div></div></section>
+
+<section id="cities" style="padding-top:0"><div class="w"><h2 data-t="plan">Planning your next getaway?</h2><div class="sub" style="font-size:18px;color:var(--t)">Explore transport options and points of interest with our City Hub.</div>
+<div class="cs"><div class="chip" onclick="city('Dhaka')">Getting around Dhaka</div><div class="chip" onclick="city('Chittagong')">Getting around Chittagong</div><div class="chip" onclick="city('Cox’s Bazar')">Getting around Cox’s Bazar</div><div class="chip" onclick="city('Khulna')">Getting around Khulna</div><div class="chip" onclick="city('Jessore')">Getting around Jessore</div></div></div></section>
+
+<section id="drive"><div class="w two"><div><h2 data-t="drive">Drive when you want, make what you need</h2><p>Make money on your schedule with rides or deliveries. Rickshaw, battery rickshaw, CNG auto or easy bike, bring your own vehicle.</p><a class="btn" onclick="drvForm()" data-t="start">Get started</a><br><a class="lnk" onclick="auth('in')">Already have an account? Sign in</a></div><div class="art"><div class="big">🧑‍✈️</div></div></div></section>
+
+<section id="biz" class="dark"><div class="w two rev"><div class="art" style="background:#1c1c1c"><div class="big">💼</div></div><div><h2>The Rickshaw Lagbe you know, reimagined for business</h2><p>Rickshaw Lagbe for Business helps companies manage employee rides, set budgets and get one monthly invoice.</p><a class="btn" onclick="bizForm()" data-t="start">Get started</a> <a class="btn l" onclick="info('Business solutions')">Check out our solutions</a></div></div></section>
+
+<section id="safety"><div class="w"><h2 data-t="safety">Your safety is our priority</h2><div class="saf">
+<div><b>🔢 PIN verification</b><p>Share a 4-digit PIN only with the right driver.</p></div>
+<div><b>🔗 Share trip status</b><p>Let family follow your ride live.</p></div>
+<div><b>🚨 In-ride SOS</b><p>Alert contacts and call 999 in one tap.</p></div>
+<div><b>⭐ Two-way ratings</b><p>Riders and drivers rate every trip.</p></div></div></div></section>
+
+<section style="background:var(--g)"><div class="w"><h2 data-t="apps">It’s easier in the apps</h2><a class="btn" onclick="toast('Rider app launching soon')">Download the Rickshaw Lagbe app</a> <a class="btn l" style="background:#fff" onclick="toast('Driver app launching soon')">Download the Driver app</a></div></section>
+</main>
+
+<footer><div class="w"><div class="logo">🛺 Rickshaw Lagbe?</div>
+<div class="g">
+<div><h4>Company</h4><a onclick="info('About us')">About us</a><a onclick="info('Our offerings')">Our offerings</a><a onclick="info('Newsroom')">Newsroom</a><a onclick="info('Blog')">Blog</a><a onclick="info('Careers')">Careers</a><a onclick="one()">Lagbe One</a></div>
+<div><h4>Products</h4><a onclick="openApp()">Ride</a><a href="#drive">Drive</a><a href="#biz">Business</a><a onclick="gift()">Gift cards</a></div>
+<div><h4>Global citizenship</h4><a href="#safety">Safety</a><a onclick="info('Sustainability')">Sustainability</a></div>
+<div><h4>Travel</h4><a onclick="resv()">Reserve</a><a onclick="air()">Airports</a><a href="#cities">Cities</a><a onclick="help()">Help Center</a></div></div>
+<div class="fb"><div>© 2026 Rickshaw Lagbe · demo project</div><div><a onclick="info('Privacy')">Privacy</a><a onclick="info('Accessibility')">Accessibility</a><a onclick="info('Terms')">Terms</a><a onclick="lang()">English / বাংলা</a></div></div></div></footer>
+
+<div id="md" onclick="if(event.target==this)cm()"><div id="mb"></div></div>
+<div id="app"><div id="map"></div><div class="ab"><button onclick="closeApp()">← Back</button><button onclick="acctM()" id="ua">👤</button></div><div id="sheet"></div></div>
 <div id="ts"></div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script>
 const $=s=>document.querySelector(s);
 const PL={"Dhanmondi 27":[23.7461,90.3742],"Gulshan 1":[23.7806,90.4166],"Uttara Sector 7":[23.8759,90.3795],"Mirpur 10":[23.8069,90.3687],"Farmgate":[23.7561,90.3897],"Motijheel":[23.7330,90.4172],"Banani":[23.7937,90.4066],"Mohakhali":[23.7776,90.3980],"Shahbag":[23.7389,90.3957],"New Market":[23.7340,90.3850],"Bashundhara R/A":[23.8190,90.4526],"Jatrabari":[23.7100,90.4350],"Airport":[23.8513,90.4084],"Kamalapur Station":[23.7312,90.4262]};
-const TY={rickshaw:{n:"Rickshaw",bn:"রিকশা",e:"🚲",b:20,k:15,v:9,s:2},van:{n:"Battery Rickshaw",bn:"ব্যাটারি রিকশা",e:"🛵",b:25,k:18,v:14,s:3},auto:{n:"CNG Auto",bn:"অটো",e:"🛺",b:40,k:28,v:22,s:3},eauto:{n:"Easy Bike",bn:"ইজি বাইক",e:"⚡",b:30,k:20,v:16,s:4},bike:{n:"Moto",bn:"বাইক",e:"🏍️",b:30,k:22,v:25,s:1}};
+const TY={rickshaw:{n:"Rickshaw",e:"🚲",b:20,k:15,v:9,s:2},van:{n:"Battery Rickshaw",e:"🛵",b:25,k:18,v:14,s:3},auto:{n:"CNG Auto",e:"🛺",b:40,k:28,v:22,s:3},eauto:{n:"Easy Bike",e:"⚡",b:30,k:20,v:16,s:4},bike:{n:"Moto",e:"🏍️",b:30,k:22,v:25,s:1}};
 const PR={FIRST50:[.5,60],RIDE20:[.2,40],BORSHA:[0,30]};
 const DR=["Rahim Uddin","Karim Mia","Jamal Hossain","Sohel Rana","Abul Kashem"];
-const S=JSON.parse(localStorage.getItem("rl")||"null")||{user:null,hist:[],saved:{Home:"Dhanmondi 27",Work:"Motijheel"},wallet:200};
+const BN={ride:"রাইড",earn:"আয় করুন",biz:"ব্যবসা",about:"সম্পর্কে",help:"সহায়তা",h1:"যেখানে খুশি যান, Rickshaw Lagbe দিয়ে",now:"🕒 এখনই পিকআপ",later:"📅 পরে শিডিউল করুন",pickup:"পিকআপ লোকেশন",drop:"গন্তব্য",prices:"ভাড়া দেখুন",recent:"সাম্প্রতিক ট্রিপ দেখতে লগ ইন করুন",explore:"Rickshaw Lagbe দিয়ে আপনি যা করতে পারেন",plan:"পরের ভ্রমণের পরিকল্পনা করছেন?",drive:"যখন খুশি চালান, যা দরকার আয় করুন",start:"শুরু করুন",safety:"আপনার নিরাপত্তা আমাদের অগ্রাধিকার",apps:"অ্যাপে আরও সহজ"};
+const S=JSON.parse(localStorage.getItem("rl")||"null")||{user:null,hist:[],wallet:200,saved:{Home:"Dhanmondi 27",Work:"Motijheel"},bn:0,drv:null};
 const save=()=>localStorage.setItem("rl",JSON.stringify(S));
-let T={pick:"Dhanmondi 27",drop:null,type:"rickshaw",pay:"Cash",promo:null,surge:false,tip:0},tm,mk={},line;
-const map=L.map("map",{zoomControl:false,attributionControl:true}).setView(PL[T.pick],14);
-L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",{attribution:"© OpenStreetMap © CARTO",maxZoom:19}).addTo(map);
-const toast=m=>{const t=$("#ts");t.textContent=m;t.style.display="block";clearTimeout(t.h);t.h=setTimeout(()=>t.style.display="none",2600)};
-const sh=h=>{const s=$("#sheet");s.style.animation="none";s.offsetHeight;s.style.animation="";s.innerHTML=h;s.scrollTop=0};
-const em=e=>L.divIcon({html:`<div style="font-size:30px;filter:drop-shadow(0 2px 3px #0005)">${e}</div>`,className:"",iconSize:[30,30]});
-const dot=(sq)=>L.divIcon({html:`<div class="mk" style="${sq?"":"border-radius:50%"}"></div>`,className:"",iconSize:[16,16]});
-function pin(k){mk[k]&&map.removeLayer(mk[k]);if(T[k])mk[k]=L.marker(PL[T[k]],{icon:dot(k==="drop")}).addTo(map)}
-function route(){line&&map.removeLayer(line);if(T.pick&&T.drop){line=L.polyline([PL[T.pick],PL[T.drop]],{color:"#000",weight:4}).addTo(map);map.fitBounds(line.getBounds(),{paddingTopLeft:[40,60],paddingBottomRight:[40,innerWidth<800?420:60]})}}
-const km=(a,b)=>map.distance(PL[a],PL[b])/1000*1.35;
-const dist=()=>km(T.pick,T.drop);
+let T={pick:"Dhanmondi 27",drop:null,type:"rickshaw",pay:"Cash",promo:null,surge:false,when:null},tm,mk={},line,map;
+$("#pl").innerHTML=Object.keys(PL).map(p=>`<option>${p}`).join("");
+const toast=m=>{const t=$("#ts");t.textContent=m;t.style.display="block";clearTimeout(t.h);t.h=setTimeout(()=>t.style.display="none",2800)};
+const modal=h=>{$("#mb").innerHTML=`<button class="x" onclick="cm()">✕</button>`+h;$("#md").classList.add("o")};const cm=()=>$("#md").classList.remove("o");
+/* i18n */
+function lang(){S.bn=!S.bn;save();tr()}
+function tr(){document.querySelectorAll("[data-t]").forEach(e=>{const k=e.dataset.t;e.dataset.en=e.dataset.en||e.textContent;e.textContent=S.bn&&BN[k]?BN[k]:e.dataset.en});document.querySelectorAll("[data-p]").forEach(e=>{e.dataset.en=e.dataset.en||e.placeholder;e.placeholder=S.bn?BN[e.dataset.p]:e.dataset.en});$("#lg").textContent=S.bn?"English":"বাংলা";document.documentElement.lang=S.bn?"bn":"en"}
+/* header/account */
+function refresh(){const u=S.user;$("#au").innerHTML=u?`<a onclick="acctM()">👤 ${u.name}</a>`:`<a class="lg" onclick="auth('in')">Log in</a><a class="su" onclick="auth('up')">Sign up</a>`;
+$("#at").textContent=u?`Welcome back, ${u.name}`:"Log in to see your account details";$("#as").textContent=u?`Wallet ৳${S.wallet} · ${S.hist.length} trips`:"View past trips, tailored suggestions, support resources, and more.";
+$("#ab2").innerHTML=u?`<a class="btn" onclick="openApp()">Request a ride</a> <a class="btn l" onclick="acctM()">Manage account</a>`:`<a class="btn" onclick="auth('in')">Log in to your account</a> <a class="btn l" onclick="auth('up')">Create an account</a>`;
+$("#rc").style.display=u&&!S.hist.length?"none":"inline-block";$("#rc").textContent=u?"Your recent activity":(S.bn?BN.recent:"Log in to see your recent activity")}
+function recent(){if(!S.user)return auth("in",recent);pg("act")}
+function auth(m,cb){T.cb=cb;modal(`<h2>${m=="up"?"Create your account":"Welcome back"}</h2><p class="sub">Enter your mobile number</p><div class="row"><div class="in" style="width:auto;margin:7px 0">🇧🇩 +880</div><input class="in" id="ph" type="tel" inputmode="numeric" placeholder="1XXXXXXXXX"></div><button class="btn b" onclick="a1()">Continue</button>`)}
+function a1(){let p=$("#ph").value.replace(/\D/g,"").replace(/^880/,"").replace(/^0/,"");if(!/^1\d{9}$/.test(p))return toast("Enter a valid Bangladesh mobile number");T.tmp=p;modal(`<h2>Enter the 4-digit code</h2><p class="sub">Sent to +880 ${p} · demo code <b>1234</b></p><input class="in" id="ot" inputmode="numeric" maxlength="4" placeholder="••••" style="font-size:28px;letter-spacing:12px;text-align:center" oninput="if(this.value.length==4)a2()"><button class="btn b" onclick="a2()">Verify</button>`);$("#ot").focus()}
+function a2(){if($("#ot").value!=="1234")return toast("Wrong code. Use 1234 (demo)");if(S.user&&S.user.phone===T.tmp)return done();modal(`<h2>What’s your name?</h2><input class="in" id="nm" placeholder="First name"><button class="btn b" onclick="a3()">Continue</button>`)}
+function a3(){const n=$("#nm").value.trim();if(!n)return toast("Please enter your name");S.user={name:n,phone:T.tmp};save();done()}
+function done(){cm();refresh();toast("Signed in ✅");const c=T.cb;T.cb=null;c&&c()}
+function acctM(){if(!S.user)return auth("in");modal(`<h2>${S.user.name}</h2><p class="sub">+880 ${S.user.phone}</p>${[["act","🕘","Activity"],["wal","👛","Wallet · ৳"+S.wallet],["promo","🎁","Promotions"],["saved","📌","Saved places"],["help","🛟","Help"]].map(x=>`<div class="item" style="cursor:pointer" onclick="pg('${x[0]}')"><div class="ic">${x[1]}</div><div class="b">${x[2]}</div></div>`).join("")}<button class="btn l b" onclick="S.user=null;save();cm();refresh();closeApp()">Sign out</button>`)}
+function pg(p){let h="";const back=`<a class="lnk" style="margin:0 0 10px" onclick="acctM()">← Account</a>`;
+if(p=="act")h=`<h2>Activity</h2>`+(S.hist.length?S.hist.map(r=>`<div class="item"><div class="ic">${TY[r.t].e}</div><div><div class="b">${r.to}</div><div class="sub">${r.d} · ${r.st}</div><div class="sub">from ${r.from} · ${r.pay}</div></div><div class="sp b">৳${r.f}</div></div>`).join(""):`<p class="sub">No trips yet.</p>`);
+if(p=="wal")h=`<h2>Wallet</h2><div style="background:#000;color:#fff;border-radius:14px;padding:22px"><div class="sub" style="color:#aaa">Balance</div><div style="font-size:40px;font-weight:700">৳${S.wallet}</div></div><button class="btn b" onclick="S.wallet+=100;save();refresh();pg('wal')">+ Add ৳100 via bKash</button><button class="btn l b" onclick="S.wallet+=500;save();refresh();pg('wal')">+ Add ৳500</button>`;
+if(p=="promo")h=`<h2>Promotions</h2>`+[["FIRST50","50% off your first ride (max ৳60)"],["RIDE20","20% off any ride (max ৳40)"],["BORSHA","৳30 off rainy-day rides"]].map(x=>`<div class="item"><div class="ic">🏷️</div><div><div class="b">${x[0]}</div><div class="sub">${x[1]}</div></div></div>`).join("")+`<p class="sub">Refer a friend: <b>RL-${S.user.phone.slice(-4)}</b></p>`;
+if(p=="saved")h=`<h2>Saved places</h2>${["Home","Work"].map(k=>`<label class="sub">${k}</label><input class="in" list="pl" value="${S.saved[k]}" onchange="PL[this.value]?(S.saved['${k}']=this.value,save(),toast('Saved')):toast('Pick a place from the list')">`).join("")}`;
+if(p=="help")return help();
+modal(back+h)}
+/* info pages */
+function info(t){modal(`<h2>${t}</h2><p class="sub" style="font-size:16px">Rickshaw Lagbe is a demo ride-hailing platform built for Bangladesh. It connects riders with rickshaw, battery rickshaw, CNG auto, easy bike and moto drivers. This page is a placeholder for “${t}”.</p>`)}
+function help(){modal(`<h2>Help Center</h2>${[["How do I request a ride?","Enter pickup and dropoff, tap See prices, choose a vehicle and confirm."],["How is the fare calculated?","Base fare plus a per-km rate for each vehicle. Peak/rain hours add 20%."],["How do I pay?","Cash, bKash, Nagad or your Rickshaw Lagbe wallet."],["What is the PIN?","A 4-digit code you share with your driver to start the trip."],["How do I become a driver?","Tap Get started in the Drive section and submit your details."],["Emergency?","Use SOS in the trip screen or call 999."]].map(x=>`<details><summary>${x[0]}</summary><p>${x[1]}</p></details>`).join("")}`)}
+function gift(){modal(`<h2>Gift cards</h2><p class="sub">Send ride credit to someone you care about.</p><select class="in" id="ga"><option>৳200</option><option>৳500</option><option>৳1000</option></select><input class="in" placeholder="Recipient phone (01XXXXXXXXX)" id="gp"><button class="btn b" onclick="cm();toast('Gift card sent 🎁 (demo)')">Send gift card</button>`)}
+function one(){modal(`<h2>⭐ Lagbe One</h2><p class="sub">৳99/month: 10% off every ride, priority pickup, no peak surcharge on rickshaws.</p><button class="btn b" onclick="cm();toast('Welcome to Lagbe One (demo)')">Join Lagbe One</button>`)}
+function city(c){modal(`<h2>Getting around ${c}</h2><p class="sub">${c=="Dhaka"?"Rickshaw, battery rickshaw, CNG auto, easy bike and moto are available across the city.":"Rickshaw Lagbe is launching in "+c+" soon. Join the waitlist!"}</p><button class="btn b" onclick="${c=="Dhaka"?"cm();openApp()":"cm();toast('You are on the waitlist ✅')"}">${c=="Dhaka"?"Request a ride":"Join waitlist"}</button>`)}
+function drvForm(){modal(`<h2>Drive with us</h2><input class="in" id="dn" placeholder="Full name" value="${S.user?.name||""}"><input class="in" id="dph" placeholder="Phone 01XXXXXXXXX"><select class="in" id="dv">${Object.values(TY).map(y=>`<option>${y.e} ${y.n}</option>`).join("")}</select><input class="in" id="dnid" placeholder="NID number"><button class="btn b" onclick="drvSend()">Submit application</button>`)}
+function drvSend(){if(!$("#dn").value||!/^0?1\d{9}$/.test($("#dph").value.replace(/\D/g,""))||$("#dnid").value.length<8)return toast("Fill all fields correctly");S.drv={n:$("#dn").value,v:$("#dv").value};save();cm();toast("Application received ✅ We’ll call you within 24h")}
+function bizForm(){modal(`<h2>Rickshaw Lagbe for Business</h2><input class="in" placeholder="Company name"><input class="in" placeholder="Work email" type="email"><select class="in"><option>1–10 employees</option><option>11–100</option><option>100+</option></select><button class="btn b" onclick="cm();toast('Thanks! Our team will contact you')">Request access</button>`)}
+function loc(){navigator.geolocation?.getCurrentPosition(p=>{let b,m=1e9;for(const n in PL){const d=hv([p.coords.latitude,p.coords.longitude],PL[n]);if(d<m){m=d;b=n}}$("#pk").value=b;toast("Pickup set to "+b)},()=>toast("Allow location access"))}
+function resv(){$("#when").value="later";$("#sdt").style.display="block";location.hash="top";$("#dp").focus();toast("Pick a date & time, then See prices")}
+function air(){$("#dp").value="Airport";$("#when").value="now";location.hash="top";toast("Airport selected. Tap See prices")}
+/* booking */
+const hv=(a,b)=>{const R=6371,r=x=>x*Math.PI/180,dl=r(b[0]-a[0]),dn=r(b[1]-a[1]),h=Math.sin(dl/2)**2+Math.cos(r(a[0]))*Math.cos(r(b[0]))*Math.sin(dn/2)**2;return 2*R*Math.asin(Math.sqrt(h))};
+const km=(a,b)=>hv(PL[a],PL[b])*1.35,dist=()=>km(T.pick,T.drop);
 const fare=t=>{const y=TY[t];let f=Math.max(y.b+y.k*dist(),y.b+20);if(T.surge)f*=1.2;return Math.round(f)};
 const disc=f=>{const p=PR[T.promo];return p?Math.round(Math.min(p[0]?f*p[0]:p[1],p[1])):0};
 const net=()=>fare(T.type)-disc(fare(T.type));
-const greet=()=>{const h=new Date().getHours();return h<12?"Good morning":h<18?"Good afternoon":"Good evening"};
-/* nav */
-function menu(o){$("#dr").classList.toggle("o",o);$("#bk").classList.toggle("o",o);if(o)$("#dr").innerHTML=`<div class="u"><div class="av">🙂</div><div><div class="b" style="font-size:20px">${S.user?.name||""}</div><div class="sub">+880 ${S.user?.phone||""}</div></div></div><a onclick="page('act')">🕘 Activity</a><a onclick="page('wal')">👛 Wallet · ৳${S.wallet}</a><a onclick="page('promo')">🎁 Promotions</a><a onclick="page('drv')">🧑‍✈️ Drive &amp; earn</a><a onclick="page('help')">🛟 Safety &amp; help</a><a style="margin-top:auto;color:#c00" onclick="out()">Sign out</a>`}
-function page(p){menu(0);const b=`<button class="fab" style="position:static;box-shadow:none;background:var(--g);margin-bottom:12px" onclick="$('#pg').classList.remove('o')">←</button>`;let h="";
-if(p==="act")h=`<h2>Activity</h2>`+(S.hist.length?S.hist.map(r=>`<div class="item" style="cursor:default"><div class="ic">${TY[r.t].e}</div><div><div class="b">${r.to}</div><div class="sub">${r.d} · ${r.st}</div><div class="sub">from ${r.from} · ${r.pay}</div></div><div class="sp b">৳${r.f}</div></div>`).join(""):`<p class="sub">No trips yet. Your rides will show up here.</p>`);
-if(p==="wal")h=`<h2>Wallet</h2><div style="background:#000;color:#fff;border-radius:14px;padding:22px"><div class="sub" style="color:#aaa">Balance</div><div style="font-size:40px;font-weight:700">৳${S.wallet}</div></div><button class="btn" onclick="S.wallet+=100;save();page('wal');toast('৳100 added via bKash (demo)')">+ Add ৳100 via bKash</button><button class="btn l" onclick="S.wallet+=500;save();page('wal');toast('৳500 added (demo)')">+ Add ৳500</button>`;
-if(p==="promo")h=`<h2>Promotions</h2>`+Object.entries({FIRST50:"50% off your first ride (max ৳60)",RIDE20:"20% off any ride (max ৳40)",BORSHA:"৳30 off rainy-day rides"}).map(([k,v])=>`<div class="item" style="cursor:default"><div class="ic">🏷️</div><div><div class="b">${k}</div><div class="sub">${v}</div></div></div>`).join("")+`<p class="sub">Refer a friend with code <b>RL-${(S.user.phone||"").slice(-4)}</b></p>`;
-if(p==="drv")h=`<h2>Drive &amp; earn</h2><div class="item" style="cursor:default"><div class="ic">💰</div><div>Keep 90% of every fare</div></div><div class="item" style="cursor:default"><div class="ic">🕒</div><div>Drive whenever you want</div></div><div class="item" style="cursor:default"><div class="ic">🛺</div><div>Rickshaw, battery rickshaw, CNG, easy bike</div></div><button class="btn" onclick="toast('Driver sign-up coming soon')">Sign up to drive</button>`;
-if(p==="help")h=`<h2>Safety &amp; help</h2><div class="item" style="cursor:default"><div class="ic">🚨</div><div><div class="b">Emergency</div><div class="sub">Call 999 anytime</div></div></div><div class="item" style="cursor:default"><div class="ic">🔗</div><div><div class="b">Share trip status</div><div class="sub">From the trip screen</div></div></div><div class="item" style="cursor:default"><div class="ic">🔢</div><div><div class="b">PIN verification</div><div class="sub">Share your 4-digit PIN only after boarding</div></div></div>`;
-$("#pg").innerHTML=b+h;$("#pg").classList.add("o")}
-function out(){S.user=null;save();menu(0);land()}
-/* login */
-function land(){$("#land").style.display="flex";$("#land").innerHTML=`<div class="hero">🛺</div><div class="logo">Rickshaw<br>Lagbe?</div><p style="color:#aaa;margin:10px 0 18px">Rickshaw, CNG &amp; easy bike rides at your fingertips.</p><div class="row"><div class="in" style="width:auto;margin:0">🇧🇩 +880</div><input class="in" id="ph" type="tel" inputmode="numeric" placeholder="1XXXXXXXXX" style="margin:0"></div><button class="btn" onclick="ph1()">Continue</button>`}
-function ph1(){let p=$("#ph").value.replace(/\D/g,"").replace(/^880/,"").replace(/^0/,"");if(!/^1\d{9}$/.test(p))return toast("Enter a valid Bangladesh mobile number");T.tmp=p;$("#land").innerHTML=`<div class="hero">💬</div><div class="logo" style="font-size:32px">Enter the 4-digit code</div><p style="color:#aaa">Sent to +880 ${p} · demo code: <b>1234</b></p><input class="in" id="ot" inputmode="numeric" maxlength="4" placeholder="••••" style="font-size:28px;letter-spacing:12px;text-align:center" oninput="if(this.value.length==4)ph2()"><button class="btn" onclick="ph2()">Verify</button>`;$("#ot").focus()}
-function ph2(){if($("#ot").value!=="1234")return toast("Wrong code. Use 1234 (demo)");$("#land").innerHTML=`<div class="hero">👋</div><div class="logo" style="font-size:32px">What's your name?</div><input class="in" id="nm" placeholder="First name" style="margin-top:18px"><button class="btn" onclick="ph3()">Get started</button>`}
-function ph3(){const n=$("#nm").value.trim();if(!n)return toast("Please enter your name");S.user={name:n,phone:T.tmp};save();enter()}
-function enter(){$("#land").style.display="none";home()}
-/* flow */
+const find=v=>Object.keys(PL).find(k=>k.toLowerCase()==v.trim().toLowerCase());
+function prices(){const a=find($("#pk").value),d=find($("#dp").value);if(!a)return toast("Choose a pickup from the list");if(!d)return toast("Choose a dropoff from the list");if(a==d)return toast("Pickup and dropoff are the same");
+T.pick=a;T.drop=d;T.when=$("#when").value=="later"?$("#sdt").value||"":null;if(T.when==="")return toast("Select date & time");openApp()}
+function openApp(){if(!S.user)return auth("in",openApp);$("#app").classList.add("o");document.body.style.overflow="hidden";
+if(!map){map=L.map("map",{zoomControl:false}).setView(PL[T.pick],14);L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",{attribution:"© OpenStreetMap © CARTO",maxZoom:19}).addTo(map)}
+setTimeout(()=>{map.invalidateSize();if(T.drop&&T.pick!==T.drop){pin("pick");pin("drop");route();ride()}else home()},60)}
+function closeApp(){clearInterval(tm);clearTimeout(tm);$("#app").classList.remove("o");document.body.style.overflow="";T.drop=null}
+const sh=h=>{const s=$("#sheet");s.style.animation="none";s.offsetHeight;s.style.animation="";s.innerHTML=h;s.scrollTop=0};
+const em=e=>L.divIcon({html:`<div style="font-size:30px;filter:drop-shadow(0 2px 3px #0005)">${e}</div>`,className:"",iconSize:[30,30]});
+const dot=q=>L.divIcon({html:`<div class="mk" style="${q?"":"border-radius:50%"}"></div>`,className:"",iconSize:[16,16]});
+function pin(k){mk[k]&&map.removeLayer(mk[k]);if(T[k])mk[k]=L.marker(PL[T[k]],{icon:dot(k=="drop")}).addTo(map)}
+function route(){line&&map.removeLayer(line);if(T.pick&&T.drop){line=L.polyline([PL[T.pick],PL[T.drop]],{color:"#000",weight:4}).addTo(map);map.fitBounds(line.getBounds(),{paddingTopLeft:[40,80],paddingBottomRight:[40,innerWidth<800?430:60]})}}
 function home(){clearInterval(tm);T.drop=null;pin("drop");line&&map.removeLayer(line);mk.d&&map.removeLayer(mk.d);pin("pick");map.setView(PL[T.pick],14);
-sh(`<div class="sub">${greet()}, ${S.user.name}</div><div class="search" onclick="where()"><span>🔍</span>Where to?</div>${Object.entries(S.saved).map(([k,v])=>`<div class="item" onclick="setDrop('${v}')"><div class="ic">${k=="Home"?"🏠":"💼"}</div><div><div class="b">${k}</div><div class="sub">${v}</div></div></div>`).join("")}<div class="item" onclick="where()"><div class="ic">🕘</div><div><div class="b">${S.hist[0]?S.hist[0].to:"Popular places"}</div><div class="sub">${S.hist[0]?"Recent trip":"Browse nearby"}</div></div></div>`)}
-function where(){sh(`<div class="row"><button class="ic" style="border:0" onclick="home()">←</button><h3>Where to?</h3></div><input class="in" id="q" placeholder="Search destination" oninput="fl()" autofocus><div id="ls"></div>`);fl();setTimeout(()=>$("#q")?.focus(),50)}
-function fl(){const q=$("#q").value.toLowerCase();$("#ls").innerHTML=Object.keys(PL).filter(n=>n!==T.pick&&n.toLowerCase().includes(q)).map(n=>`<div class="item" onclick="setDrop('${n}')"><div class="ic">📍</div><div><div class="b">${n}</div><div class="sub">${km(T.pick,n).toFixed(1)} km · Dhaka</div></div></div>`).join("")||`<p class="sub">No places found</p>`}
-function setDrop(n){if(n===T.pick)return toast("Pickup and drop-off are the same");T.drop=n;pin("drop");route();ride()}
-function ride(){const d=dist();sh(`<div class="row"><button class="ic" style="border:0" onclick="home()">←</button><div><h3>Choose a ride</h3><div class="sub">${T.pick} → ${T.drop} · ${d.toFixed(1)} km</div></div></div>`+Object.entries(TY).map(([k,y])=>{const f=fare(k),m=Math.max(2,Math.round(d/y.v*60)),D=disc(f);return`<div class="veh ${k==T.type?"on":""}" onclick="T.type='${k}';ride()"><div class="em">${y.e}</div><div><div class="b">${y.n} <span class="sub">· 👤${y.s}</span></div><div class="sub">${new Date(Date.now()+m*6e4+(k.length%4+2)*6e4).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"})} · ${k.length%4+2} min away</div></div><div class="sp" style="text-align:right"><div class="b">৳${f-D}</div>${D?`<div class="sub" style="text-decoration:line-through">৳${f}</div>`:""}</div></div>`}).join("")+`<div class="row" style="margin-top:10px"><label class="pill">💳<select onchange="T.pay=this.value">${["Cash","bKash","Nagad","Wallet"].map(p=>`<option ${p==T.pay?"selected":""}>${p}</option>`).join("")}</select></label><label class="pill">🏷️<input placeholder="Promo code" value="${T.promo||""}" onchange="promo(this.value)" style="text-transform:uppercase"></label></div><label class="sub" style="display:flex;gap:8px;margin-top:12px;align-items:center"><input type="checkbox" ${T.surge?"checked":""} onchange="T.surge=this.checked;ride()"> Rain / peak hour (+20%)</label><button class="btn" onclick="req()">Choose ${TY[T.type].n} · ৳${net()}</button>`)}
-function promo(c){c=c.trim().toUpperCase();if(!c){T.promo=null}else if(PR[c]){T.promo=c;toast("Promo applied 🎉")}else{T.promo=null;toast("Invalid promo code")}ride()}
-function req(){if(T.pay==="Wallet"&&S.wallet<net())return toast("Not enough wallet balance");let i=0;
-sh(`<h2 style="text-align:center">Finding your ${TY[T.type].n}…</h2><div class="pulse"></div><p class="sub" style="text-align:center">Contacting nearby drivers</p><button class="btn l" onclick="home()">Cancel</button>`);tm=setTimeout(()=>trip(),3500)}
-function trip(){const pn=1000+Math.floor(Math.random()*9000),dv={n:DR[Math.random()*5|0],r:(4.5+Math.random()*.5).toFixed(2),pl:"DHAKA-"+(10+Math.random()*89|0)+"-"+(1000+Math.random()*8999|0)};
-const A=PL[T.pick],B=PL[T.drop],s0=[A[0]+.012,A[1]-.012],N=44;let s=0;mk.d&&map.removeLayer(mk.d);mk.d=L.marker(s0,{icon:em(TY[T.type].e)}).addTo(map);map.fitBounds(L.latLngBounds([s0,A,B]),{paddingTopLeft:[40,60],paddingBottomRight:[40,innerWidth<800?400:60]});
-const v=()=>{const ph=s<16?0:s<N?1:2;sh(`<div class="row"><h3>${["Driver is on the way","On trip to "+T.drop,"You've arrived"][ph]}</h3><span class="pin sp">${pn}</span></div><div class="bar"><i style="width:${s/N*100}%"></i></div><div class="sub">${ph==0?"Arriving in "+Math.max(1,Math.ceil((16-s)/4))+" min · share PIN with driver":ph==1?"ETA "+Math.max(1,Math.ceil((N-s)/4))+" min":""}</div><div class="item" style="cursor:default"><div class="av">🧔</div><div><div class="b">${dv.n}</div><div class="sub">⭐ ${dv.r} · ${TY[T.type].n}</div></div><div class="sp b" style="text-align:right;font-size:14px;border:1px solid #ddd;border-radius:6px;padding:4px 8px">${dv.pl}</div></div><div class="row"><div class="act"><button onclick="toast('Calling ${dv.n}… (demo)')">📞</button>Call</div><div class="act"><button onclick="toast('Chat opened (demo)')">💬</button>Message</div><div class="act"><button onclick="toast('Trip link copied')">🔗</button>Share</div><div class="act"><button onclick="toast('Emergency alert sent (demo)')">🚨</button>SOS</div></div>${ph==0?`<button class="btn red" onclick="home()">Cancel trip</button>`:""}`)};
+sh(`<div class="sub">Hi ${S.user.name}</div><div class="search" onclick="where()">🔍 Where to?</div>${Object.entries(S.saved).map(([k,v])=>`<div class="item" style="cursor:pointer" onclick="setDrop('${v}')"><div class="ic">${k=="Home"?"🏠":"💼"}</div><div><div class="b">${k}</div><div class="sub">${v}</div></div></div>`).join("")}`)}
+function where(){sh(`<div class="row"><button class="ic" style="border:0" onclick="home()">←</button><h3>Where to?</h3></div><input class="in" id="q" placeholder="Search destination" oninput="fl()"><div id="ls"></div>`);fl();setTimeout(()=>$("#q").focus(),50)}
+function fl(){const q=$("#q").value.toLowerCase();$("#ls").innerHTML=Object.keys(PL).filter(n=>n!==T.pick&&n.toLowerCase().includes(q)).map(n=>`<div class="item" style="cursor:pointer" onclick="setDrop('${n}')"><div class="ic">📍</div><div><div class="b">${n}</div><div class="sub">${km(T.pick,n).toFixed(1)} km</div></div></div>`).join("")||`<p class="sub">No places found</p>`}
+function setDrop(n){T.drop=n;pin("drop");route();ride()}
+function ride(){const d=dist();sh(`<div class="row"><button class="ic" style="border:0" onclick="home()">←</button><div><h3>Choose a ride</h3><div class="sub">${T.pick} → ${T.drop} · ${d.toFixed(1)} km${T.when?" · "+T.when.replace("T"," "):""}</div></div></div>`+Object.entries(TY).map(([k,y])=>{const f=fare(k),D=disc(f),a=k.length%4+2;return`<div class="veh ${k==T.type?"on":""}" onclick="T.type='${k}';ride()"><div class="em">${y.e}</div><div><div class="b">${y.n} <span class="sub">· 👤${y.s}</span></div><div class="sub">${a} min away · ${Math.max(2,Math.round(d/y.v*60))} min trip</div></div><div class="sp" style="text-align:right"><div class="b">৳${f-D}</div>${D?`<div class="sub" style="text-decoration:line-through">৳${f}</div>`:""}</div></div>`}).join("")+`<div class="row" style="margin-top:10px"><label class="pill">💳<select onchange="T.pay=this.value">${["Cash","bKash","Nagad","Wallet"].map(p=>`<option ${p==T.pay?"selected":""}>${p}</option>`).join("")}</select></label><label class="pill">🏷️<input placeholder="Promo code" value="${T.promo||""}" onchange="promo(this.value)" style="text-transform:uppercase"></label></div><label class="sub" style="display:flex;gap:8px;margin-top:12px;align-items:center"><input type="checkbox" ${T.surge?"checked":""} onchange="T.surge=this.checked;ride()"> Rain / peak hour (+20%)</label><button class="btn b" onclick="req()">${T.when?"Reserve":"Choose"} ${TY[T.type].n} · ৳${net()}</button>`)}
+function promo(c){c=c.trim().toUpperCase();if(!c)T.promo=null;else if(PR[c]){T.promo=c;toast("Promo applied 🎉")}else{T.promo=null;toast("Invalid promo code")}ride()}
+function req(){if(T.pay=="Wallet"&&S.wallet<net())return toast("Not enough wallet balance");
+if(T.when){S.hist.unshift({from:T.pick,to:T.drop,t:T.type,f:net(),pay:T.pay,d:T.when.replace("T"," "),st:"Scheduled"});save();refresh();closeApp();return toast("Ride reserved ✅")}
+sh(`<h2 style="text-align:center">Finding your ${TY[T.type].n}…</h2><div class="pulse"></div><p class="sub" style="text-align:center">Contacting nearby drivers</p><button class="btn l b" onclick="clearTimeout(tm);home()">Cancel</button>`);tm=setTimeout(trip,3500)}
+function trip(){const pn=1000+Math.random()*9000|0,dv={n:DR[Math.random()*5|0],r:(4.5+Math.random()*.5).toFixed(2),pl:"DHAKA-"+(10+Math.random()*89|0)+"-"+(1000+Math.random()*8999|0)};
+const A=PL[T.pick],B=PL[T.drop],s0=[A[0]+.012,A[1]-.012],N=44;let s=0;mk.d&&map.removeLayer(mk.d);mk.d=L.marker(s0,{icon:em(TY[T.type].e)}).addTo(map);map.fitBounds(L.latLngBounds([s0,A,B]),{paddingTopLeft:[40,80],paddingBottomRight:[40,innerWidth<800?400:60]});
+const v=()=>{const ph=s<16?0:s<N?1:2;sh(`<div class="row"><h3>${["Driver is on the way","On trip to "+T.drop,"You’ve arrived"][ph]}</h3><span class="pin sp">${pn}</span></div><div class="bar"><i style="width:${s/N*100}%"></i></div><div class="sub">${ph==0?"Arriving in "+Math.max(1,Math.ceil((16-s)/4))+" min · share PIN with driver":ph==1?"ETA "+Math.max(1,Math.ceil((N-s)/4))+" min":""}</div><div class="item"><div class="av">🧔</div><div><div class="b">${dv.n}</div><div class="sub">⭐ ${dv.r} · ${TY[T.type].n}</div></div><div class="sp b" style="font-size:13px;border:1px solid #ddd;border-radius:6px;padding:4px 8px">${dv.pl}</div></div><div class="row"><div class="act"><button onclick="toast('Calling ${dv.n}… (demo)')">📞</button>Call</div><div class="act"><button onclick="toast('Chat opened (demo)')">💬</button>Message</div><div class="act"><button onclick="toast('Trip link copied')">🔗</button>Share</div><div class="act"><button onclick="toast('Emergency alert sent (demo)')">🚨</button>SOS</div></div>${ph==0?`<button class="btn l b" onclick="clearInterval(tm);home()">Cancel trip</button>`:""}`)};
 v();tm=setInterval(()=>{s++;const f=s<16?[s0,A,s/16]:s<N?[A,B,(s-16)/(N-16)]:[B,B,1];mk.d.setLatLng([f[0][0]+(f[1][0]-f[0][0])*f[2],f[0][1]+(f[1][1]-f[0][1])*f[2]]);v();if(s>=N){clearInterval(tm);setTimeout(()=>fin(dv),1500)}},700)}
-function fin(dv){const f=net();if(T.pay==="Wallet")S.wallet-=f;S.hist.unshift({from:T.pick,to:T.drop,t:T.type,f,pay:T.pay,d:new Date().toLocaleString([],{dateStyle:"medium",timeStyle:"short"}),st:"Completed"});save();T.pick=T.drop;T.tip=0;
-sh(`<h2 style="text-align:center">৳${f}</h2><p class="sub" style="text-align:center;margin-top:-8px">Paid with ${T.pay} · ${T.drop}</p><h3 style="text-align:center;margin-top:18px">Rate ${dv.n}</h3><div class="st" style="text-align:center">${[1,2,3,4,5].map(i=>`<span onclick="document.querySelectorAll('.st span').forEach((e,j)=>e.classList.toggle('on',j<${i}))">★</span>`).join("")}</div><div style="text-align:center">${[0,10,20,50].map(t=>`<span class="chip ${t?"":"on"}" onclick="T.tip=${t};document.querySelectorAll('.tp').forEach(e=>e.classList.remove('on'));this.classList.add('on')" ><span class="tp ${t?"":"on"}">${t?"+৳"+t:"No tip"}</span></span>`).join("")}</div><button class="btn" onclick="toast('Thanks for riding!');home()">Done</button>`);document.querySelectorAll(".chip").forEach(c=>c.onclick=function(){document.querySelectorAll(".chip").forEach(x=>x.classList.remove("on"));this.classList.add("on");T.tip=parseInt(this.textContent.replace(/\D/g,""))||0})}
-S.user?enter():land();
+function fin(dv){const f=net();if(T.pay=="Wallet")S.wallet-=f;S.hist.unshift({from:T.pick,to:T.drop,t:T.type,f,pay:T.pay,d:new Date().toLocaleString([],{dateStyle:"medium",timeStyle:"short"}),st:"Completed"});save();refresh();T.pick=T.drop;
+sh(`<h2 style="text-align:center;font-size:40px;margin:6px 0">৳${f}</h2><p class="sub" style="text-align:center">Paid with ${T.pay} · ${T.drop}</p><h3 style="text-align:center;margin-top:16px">Rate ${dv.n}</h3><div class="st" style="text-align:center">${[1,2,3,4,5].map(i=>`<span onclick="document.querySelectorAll('.st span').forEach((e,j)=>e.classList.toggle('on',j<${i}))">★</span>`).join("")}</div><div style="text-align:center">${["No tip","+৳10","+৳20","+৳50"].map((t,i)=>`<span class="tc ${i?"":"on"}" onclick="document.querySelectorAll('.tc').forEach(e=>e.classList.remove('on'));this.classList.add('on')">${t}</span>`).join("")}</div><button class="btn b" onclick="toast('Thanks for riding!');home()">Done</button>`)}
+document.querySelectorAll("nav a").forEach(a=>a.addEventListener("click",()=>$("#nv").classList.remove("o")));
+refresh();tr();
 </script>
 </body>
 </html>
