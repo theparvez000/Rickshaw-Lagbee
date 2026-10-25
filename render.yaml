@@ -1,0 +1,5 @@
+services:
+  - type: web
+    name: rickshaw-lagbe
+    runtime: static
+    staticPublishPath: .

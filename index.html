@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rickshaw Lagbe? – রিকশা লাগবে?</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<style>
+:root{--bg:#fff;--fg:#111;--mut:#6b6b6b;--card:#f4f4f4;--acc:#06c167;--bd:#e3e3e3}
+@media(prefers-color-scheme:dark){:root{--bg:#121212;--fg:#f2f2f2;--mut:#a0a0a0;--card:#1e1e1e;--bd:#333}}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,sans-serif;background:var(--bg);color:var(--fg);height:100vh;overflow:hidden}
+header{position:absolute;z-index:1000;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--bg);border-bottom:1px solid var(--bd)}
+h1{font-size:18px;margin:0}h1 span{color:var(--acc)}
+nav button{background:none;border:0;color:var(--fg);font-size:14px;margin-left:10px;cursor:pointer}
+#map{position:absolute;inset:50px 0 0 0}
+#panel{position:absolute;z-index:1000;left:12px;top:62px;width:370px;max-width:calc(100% - 24px);max-height:calc(100% - 80px);overflow:auto;background:var(--bg);border-radius:14px;padding:16px;box-shadow:0 4px 20px #0004}
+@media(max-width:600px){#panel{top:auto;bottom:0;left:0;max-width:100%;width:100%;border-radius:16px 16px 0 0;max-height:70%}}
+input,select{width:100%;padding:11px;margin:4px 0;border:1px solid var(--bd);border-radius:8px;background:var(--card);color:var(--fg);font-size:14px}
+button.p{width:100%;padding:13px;margin-top:8px;border:0;border-radius:10px;background:var(--fg);color:var(--bg);font-weight:600;font-size:15px;cursor:pointer}
+button.g{background:var(--acc);color:#fff}button.r{background:#e5484d;color:#fff}
+.opt{display:flex;align-items:center;gap:10px;padding:10px;border:2px solid transparent;background:var(--card);border-radius:10px;margin:6px 0;cursor:pointer}
+.opt.sel{border-color:var(--fg)}.opt .e{font-size:28px}.opt b{display:block}.opt small{color:var(--mut)}.opt .pr{margin-left:auto;font-weight:700}
+.row{display:flex;gap:8px}.row>*{flex:1}.mut{color:var(--mut);font-size:13px}.card{background:var(--card);padding:12px;border-radius:10px;margin:8px 0}
+.stars span{font-size:30px;cursor:pointer;color:#bbb}.stars span.on{color:#f5b301}
+.bar{height:6px;background:var(--bd);border-radius:3px;overflow:hidden;margin:10px 0}.bar i{display:block;height:100%;width:0;background:var(--acc);transition:width .4s}
+.hide{display:none}.tag{display:inline-block;background:var(--acc);color:#fff;border-radius:6px;padding:2px 8px;font-size:12px}
+.chip{display:inline-block;padding:6px 10px;margin:3px 3px 0 0;background:var(--card);border-radius:20px;font-size:13px;cursor:pointer}
+</style>
+</head>
+<body>
+<header><h1>🛺 Rickshaw <span>Lagbe?</span></h1>
+<nav><button onclick="go('book')">Ride</button><button onclick="go('hist')">History</button><button onclick="go('acct')">Account</button><button onclick="go('drv')">Drive</button></nav></header>
+<div id="map"></div>
+<div id="panel"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+const $=s=>document.querySelector(s);
+const PLACES={"Dhanmondi 27":[23.7461,90.3742],"Gulshan 1":[23.7806,90.4166],"Uttara Sector 7":[23.8759,90.3795],"Mirpur 10":[23.8069,90.3687],"Farmgate":[23.7561,90.3897],"Motijheel":[23.7330,90.4172],"Banani":[23.7937,90.4066],"Mohakhali":[23.7776,90.3980],"Shahbag":[23.7389,90.3957],"New Market":[23.7340,90.3850],"Bashundhara R/A":[23.8190,90.4526],"Jatrabari":[23.7100,90.4350]};
+const TYPES={rickshaw:{n:"Rickshaw",bn:"রিকশা",e:"🚲",base:20,km:15,spd:9,seats:2},van:{n:"Battery Rickshaw",bn:"ব্যাটারি রিকশা",e:"🛵",base:25,km:18,spd:14,seats:3},auto:{n:"CNG Auto",bn:"অটো/সিএনজি",e:"🛺",base:40,km:28,spd:22,seats:3},eauto:{n:"Easy Bike (Electric)",bn:"ইজি বাইক",e:"⚡",base:30,km:20,spd:16,seats:4},bike:{n:"Moto",bn:"বাইক",e:"🏍️",base:30,km:22,spd:25,seats:1}};
+const PROMOS={FIRST50:["৫০% off (max ৳60)",.5,60],RIDE20:["২০% off",.2,40],BORSHA:["৳30 off",0,30]};
+const DRIVERS=[["Rahim Uddin","1.2 km"],["Karim Mia","0.8 km"],["Jamal Hossain","1.5 km"],["Sohel Rana","0.6 km"],["Abul Kashem","1.0 km"]];
+const S=JSON.parse(localStorage.getItem("rl")||"null")||{user:null,hist:[],saved:{Home:"Dhanmondi 27",Work:"Motijheel"},wallet:200};
+const save=()=>localStorage.setItem("rl",JSON.stringify(S));
+let st={pick:null,drop:null,type:"rickshaw",pay:"Cash",promo:null,rating:0,tip:0,timer:null,online:false};
+const map=L.map("map",{zoomControl:false}).setView([23.78,90.40],12);
+L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{attribution:"© OpenStreetMap"}).addTo(map);
+let mk={},line=null;
+const ic=e=>L.divIcon({html:`<div style="font-size:26px">${e}</div>`,className:"",iconSize:[28,28]});
+function setPt(k,name,ll,e){st[k]=name;mk[k]&&map.removeLayer(mk[k]);mk[k]=L.marker(ll,{icon:ic(e)}).addTo(map);if(st.pick&&st.drop)drawRoute()}
+const ll=n=>PLACES[n];
+const dist=()=>{if(!st.pick||!st.drop)return 0;return map.distance(ll(st.pick),ll(st.drop))/1000*1.35};
+function drawRoute(){line&&map.removeLayer(line);line=L.polyline([ll(st.pick),ll(st.drop)],{color:"#06c167",weight:5,dashArray:"8"}).addTo(map);map.fitBounds(line.getBounds(),{padding:[80,80]})}
+function fare(t){const T=TYPES[t],d=dist();let f=Math.max(T.base+T.km*d,T.base+20);if(st.surge)f*=1.2;return Math.round(f)}
+function disc(f){const p=PROMOS[st.promo];if(!p)return 0;return Math.round(Math.min(f*p[1]||p[2],p[2]))}
+const go=v=>{clearInterval(st.timer);({book,hist,acct,drv,login,otp}[v])()};
+const P=h=>$("#panel").innerHTML=h;
+const opts=()=>Object.keys(PLACES).map(p=>`<option>${p}`).join("");
+function book(){
+ if(!S.user)return login();
+ P(`<b>Hi ${S.user.name} 👋 Kothay jabe?</b>
+ <datalist id="pl">${opts()}</datalist>
+ <input list="pl" id="pk" placeholder="📍 Pickup" value="${st.pick||""}" onchange="pickIt('pick',this.value)">
+ <input list="pl" id="dp" placeholder="🎯 Drop-off" value="${st.drop||""}" onchange="pickIt('drop',this.value)">
+ <div>${Object.entries(S.saved).map(([k,v])=>`<span class="chip" onclick="pickIt('drop','${v}')">${k==="Home"?"🏠":"💼"} ${k}</span>`).join("")}
+ <span class="chip" onclick="locate()">📡 Use my location</span></div>
+ <div id="rides"></div>`);
+ rides()}
+function pickIt(k,v){if(!PLACES[v]){alert("Place list theke select korun (ba map e click korun)");return}setPt(k,v,ll(v),k==="pick"?"📍":"🎯");rides()}
+function locate(){navigator.geolocation?.getCurrentPosition(p=>{let b=null,m=1e9;for(const n in PLACES){const d=map.distance([p.coords.latitude,p.coords.longitude],ll(n));if(d<m){m=d;b=n}}$("#pk").value=b;pickIt("pick",b)},()=>alert("Location permission din"))}
+map.on("click",e=>{let b=null,m=1e9;for(const n in PLACES){const d=map.distance(e.latlng,ll(n));if(d<m){m=d;b=n}}if(!$("#pk")||!$("#dp"))return;const k=st.pick&&!st.drop?"drop":"pick";$(k==="pick"?"#pk":"#dp").value=b;pickIt(k,b)});
+function rides(){const el=$("#rides");if(!el)return;if(!st.pick||!st.drop){el.innerHTML='<p class="mut">Pickup ar drop select korun, ba map e tap korun.</p>';return}
+ if(st.pick===st.drop){el.innerHTML='<p class="mut">Pickup ar drop ek hoye geche.</p>';return}
+ const d=dist();el.innerHTML=`<p class="mut">${d.toFixed(1)} km</p>`+Object.entries(TYPES).map(([k,T])=>{const f=fare(k),m=Math.max(2,Math.round(d/T.spd*60));return`<div class="opt ${k===st.type?"sel":""}" onclick="st.type='${k}';rides()"><span class="e">${T.e}</span><div><b>${T.n} <small>${T.bn}</small></b><small>${m} min • ${T.seats} seat • ${1+(k.length%4)} min away</small></div><span class="pr">৳${f}</span></div>`}).join("")+
+ `<div class="row"><select onchange="st.pay=this.value"><option ${st.pay=="Cash"?"selected":""}>Cash<option ${st.pay=="bKash"?"selected":""}>bKash<option ${st.pay=="Nagad"?"selected":""}>Nagad<option ${st.pay=="Wallet"?"selected":""}>Wallet</select>
+ <input id="pm" placeholder="Promo (FIRST50)" value="${st.promo||""}" onchange="applyPromo(this.value)"></div>
+ <label class="mut"><input type="checkbox" id="sch" style="width:auto"> Schedule later</label> <input type="datetime-local" id="sct" class="hide">
+ <label class="mut"><input type="checkbox" id="sg" onchange="st.surge=this.checked;rides()" ${st.surge?"checked":""} style="width:auto"> Rain/peak hour (+20%)</label>
+ <button class="p g" onclick="request()">Request ${TYPES[st.type].n} • ৳${fare(st.type)-disc(fare(st.type))}</button>`;
+ $("#sch").onchange=e=>$("#sct").classList.toggle("hide",!e.target.checked)}
+function applyPromo(c){c=c.toUpperCase().trim();if(!c){st.promo=null}else if(PROMOS[c]){st.promo=c;alert("Promo applied: "+PROMOS[c][0])}else{st.promo=null;alert("Invalid promo")}rides()}
+function request(){if(st.pay==="Wallet"&&S.wallet<fare(st.type)-disc(fare(st.type)))return alert("Wallet e taka kom. Account e top-up korun.");
+ if($("#sch")?.checked){const t=$("#sct").value;if(!t)return alert("Time select korun");S.hist.unshift({...snap(),status:"Scheduled for "+t.replace("T"," ")});save();alert("Ride scheduled ✅");return go("hist")}
+ let i=0;P(`<h3>Driver khuji...</h3><div class="bar"><i id="b"></i></div><p class="mut">Nearby ${TYPES[st.type].n} driver ke request pathano hocche</p><button class="p r" onclick="go('book')">Cancel</button>`);
+ st.timer=setInterval(()=>{i++;$("#b").style.width=i*25+"%";if(i>=4){clearInterval(st.timer);matched()}},900)}
+const snap=()=>({from:st.pick,to:st.drop,type:st.type,fare:fare(st.type)-disc(fare(st.type)),pay:st.pay,date:new Date().toLocaleString()});
+function matched(){const d=DRIVERS[Math.floor(Math.random()*5)],pin=1000+Math.floor(Math.random()*9000),pl="DHAKA-"+(10+Math.floor(Math.random()*89))+"-"+(1000+Math.floor(Math.random()*8999));st.drv={n:d[0],pl,pin,r:(4.5+Math.random()*.5).toFixed(1)};
+ let step=0,N=40;const A=ll(st.pick),B=ll(st.drop),start=[A[0]+.012,A[1]-.012];mk.d&&map.removeLayer(mk.d);mk.d=L.marker(start,{icon:ic(TYPES[st.type].e)}).addTo(map);
+ const view=()=>P(`<span class="tag">${step<15?"Driver ashche":step<18?"Driver pouche geche":step<N?"Trip cholche":"Pouche geche!"}</span>
+ <div class="card"><b>${st.drv.n}</b> ⭐${st.drv.r}<br><span class="mut">${TYPES[st.type].n} • ${st.drv.pl}</span><br>Start PIN: <b style="font-size:20px">${pin}</b></div>
+ <div class="bar"><i style="width:${step/N*100}%"></i></div><div class="mut">ETA ${Math.max(0,Math.ceil((N-step)/4))} min • Fare ৳${snap().fare} (${st.pay})</div>
+ <div class="row"><button class="p" onclick="alert('📞 Calling ${st.drv.n}...')">📞 Call</button><button class="p" onclick="alert('💬 Chat opened')">💬 Chat</button></div>
+ <div class="row"><button class="p" onclick="alert('Trip link copied: rickshawlagbe.app/t/${pin}')">🔗 Share</button><button class="p r" onclick="alert('🚨 SOS: Emergency contacts ar 999 ke alert pathano holo (demo)')">🚨 SOS</button></div>
+ ${step<15?'<button class="p" onclick="go(\'book\')">Cancel ride</button>':""}`);
+ view();st.timer=setInterval(()=>{step++;const t=step<15?step/15:(step<18?1:(step-18)/(N-18));const from=step<18?start:A,to=step<18?A:B;mk.d.setLatLng([from[0]+(to[0]-from[0])*Math.min(t,1),from[1]+(to[1]-from[1])*Math.min(t,1)]);view();if(step>=N){clearInterval(st.timer);done()}},700)}
+function done(){const s=snap();if(st.pay==="Wallet")S.wallet-=s.fare;S.hist.unshift({...s,driver:st.drv.n,status:"Completed"});save();st.rating=0;
+ P(`<h3>🎉 Pouche gechen!</h3><div class="card">${st.pick} → ${st.drop}<br><b>Total ৳${s.fare}</b> via ${s.pay}${st.promo?` <span class="tag">${st.promo}</span>`:""}</div>
+ <p>Rate ${st.drv.n}</p><div class="stars">${[1,2,3,4,5].map(i=>`<span onclick="rate(${i})">★</span>`).join("")}</div>
+ <p class="mut">Tip dibenn?</p><div>${[0,10,20,50].map(t=>`<span class="chip" onclick="st.tip=${t};this.style.outline='2px solid #06c167'">৳${t}</span>`).join("")}</div>
+ <button class="p g" onclick="mk.d&&map.removeLayer(mk.d);st.pick=st.drop=null;['pick','drop'].forEach(k=>mk[k]&&map.removeLayer(mk[k]));line&&map.removeLayer(line);go('book')">Submit</button>`)}
+function rate(n){document.querySelectorAll(".stars span").forEach((s,i)=>s.classList.toggle("on",i<n))}
+function hist(){if(!S.user)return login();P(`<h3>Your rides</h3>`+(S.hist.length?S.hist.map(h=>`<div class="card"><b>${TYPES[h.type].e} ${h.from} → ${h.to}</b><br><span class="mut">${h.date} • ৳${h.fare} • ${h.pay}<br>${h.status}${h.driver?" • "+h.driver:""}</span></div>`).join(""):'<p class="mut">Ekhono kono ride nei.</p>'))}
+function acct(){if(!S.user)return login();P(`<h3>${S.user.name}</h3><p class="mut">📱 ${S.user.phone}</p>
+ <div class="card">👛 Wallet: <b>৳${S.wallet}</b><div class="row"><button class="p" onclick="S.wallet+=100;save();acct()">+৳100 bKash</button><button class="p" onclick="S.wallet+=500;save();acct()">+৳500</button></div></div>
+ <b>Saved places</b><datalist id="pl">${opts()}</datalist>
+ <input list="pl" value="${S.saved.Home}" onchange="S.saved.Home=this.value;save()"><input list="pl" value="${S.saved.Work}" onchange="S.saved.Work=this.value;save()">
+ <div class="card">🎁 Refer a friend: <b>RL-${S.user.phone.slice(-4)}</b><br><span class="mut">Promo: FIRST50 • RIDE20 • BORSHA</span></div>
+ <button class="p r" onclick="S.user=null;save();login()">Log out</button>`)}
+function login(){P(`<h3>Welcome! স্বাগতম 🛺</h3><p class="mut">Phone number diye login korun</p><input id="nm" placeholder="Your name"><input id="ph" type="tel" placeholder="01XXXXXXXXX"><button class="p g" onclick="sendOtp()">Send OTP</button>`)}
+function sendOtp(){const n=$("#nm").value.trim(),p=$("#ph").value.trim();if(!n||!/^01\d{9}$/.test(p))return alert("Sothik name ar 11-digit BD number din");st.tmp={name:n,phone:p};P(`<h3>OTP din</h3><p class="mut">${p} e code pathano hoyeche (demo: 1234)</p><input id="ot" maxlength="4" placeholder="1234"><button class="p g" onclick="otp()">Verify</button>`)}
+function otp(){if($("#ot")?.value!=="1234")return alert("Wrong OTP (demo: 1234)");S.user=st.tmp;save();book()}
+function drv(){if(!S.user)return login();P(`<h3>Drive & earn 🧑‍✈️</h3><p class="mut">Driver mode (demo)</p><button class="p ${st.online?"r":"g"}" onclick="st.online=!st.online;drv()">${st.online?"Go offline":"Go online"}</button>
+ <div class="card">Status: <b>${st.online?"🟢 Online – ride request jonno opekkha":"⚪ Offline"}</b><br>Today: ৳${S.hist.filter(h=>h.status=="Completed").reduce((a,h)=>a+h.fare,0)} • ${S.hist.filter(h=>h.status=="Completed").length} trips<br>Rating: ⭐4.8</div>
+ ${st.online?`<div class="card">🔔 New request: ${S.saved.Home} → ${S.saved.Work}<div class="row"><button class="p g" onclick="alert('Accepted!')">Accept</button><button class="p" onclick="drv()">Decline</button></div></div>`:""}
+ <p class="mut">Apni ki rickshaw/auto driver? Documents (NID, license) upload korun – coming soon.</p>`)}
+book();
+</script>
+</body>
+</html>
